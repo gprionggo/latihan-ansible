@@ -1,0 +1,64 @@
+---
+- name: Konfigurasi Paket Apache
+  hosts: server
+  become: yes
+  tasks:
+    - name : Ping Server
+      ping:
+    - name : Update Repo
+      apt:
+        update_cache: yes
+    - name : Install apache2
+      apt:
+        name:
+          - apache2
+          - mysql-server
+          - mysql-client
+          - python3-pymysql
+          - php-curl
+          - php-gd
+          - php-mbstring
+          - php-xml
+          - php-xmlrpc
+          - php-soap
+          - php-intl
+          - php-mysql
+          - libapache2-mod-php
+        state: present
+
+    - name: run apache2 
+      service:
+        name : apache2
+        state: started
+
+    - name: run MySQL
+      service:
+        name : mysql
+        state: started
+
+    - name: Change the authentication plugin of MySQL root user to mysql_native_password
+      shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
+      ignore_errors: yes
+
+    - name: Flush Privileges
+      shell: mysql -u root -e 'FLUSH PRIVILEGES'
+      ignore_errors: yes
+
+    - name: Config mysql root password
+      ignore_errors: yes
+      mysql_user: 
+        login_host: 'localhost'
+        login_user: 'root'
+        login_password: ''
+        name: root
+        password: "12345"
+        state: present
+    
+    - name: create mysql database
+      ignore_errors: yes
+      mysql_db: 
+        login_host: 'localhost'
+        login_user: 'root'
+        login_password: '12345'
+        name: wpdb
+        state: present

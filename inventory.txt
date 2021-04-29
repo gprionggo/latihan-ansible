@@ -1,0 +1,2 @@
+[server]
+  "ip-public ec2"

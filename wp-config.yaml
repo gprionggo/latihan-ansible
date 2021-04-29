@@ -1,0 +1,62 @@
+---
+- name: Konfigurasi Wordpress
+  hosts: server
+  tasks:
+    - name: Ping server
+      ping:
+    - name: membuat folder wordpress
+      file:
+        path: /home/ubuntu/
+        state: directory
+
+    - name: Download dan Unzip Wordpress
+      unarchive:
+        src: https://wordpress.org/latest.tar.gz
+        dest: /home/ubuntu/
+        remote_src: yes
+    
+    - name: Enable the Apache2 module rewrite
+      shell: a2enmod rewrite
+      become: yes
+    
+    - name: Enable the Apache2 module php*
+      shell: a2dismod php*
+      become: yes
+    
+    - name: Enable the Apache2 module php7.4
+      shell: a2enmod php7.4
+      become: yes
+    
+    - name: copy apache default config
+      copy: 
+        src: ./000-default.conf
+        dest: /etc/apache2/sites-available/
+      become: yes
+    
+    - name: copy wp-config wordpress
+      copy: 
+        src: ./wp-config.php
+        dest: /home/ubuntu/wordpress/
+      become: yes
+    
+    - name: Ubah kepemilikan direktori
+      shell: chown -R ubuntu:www-data /home/ubuntu/wordpress
+      become: yes
+
+    - name: Menambahkan user
+      shell: usermod -aG www-data ubuntu
+      become: yes
+
+    - name: Chmod 775
+      shell: find /home/ubuntu/wordpress/ -type d -exec chmod 775 {} \;
+      become: yes
+    
+    - name: Chmod 644
+      shell: find /home/ubuntu/wordpress/ -type f -exec chmod 644 {} \;
+      become: yes
+    
+    - name: restart apache2 service
+      service:
+        name: apache2
+        state: restarted
+      become: yes

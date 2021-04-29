@@ -1,0 +1,23 @@
+Pada percobaan ini menggunakan AWSEducate dan Ansible.
+1. Pastikan Ansible sudah diinstall dan mempunyai akun AWSEducate.
+2. Buatlah EC2 pada Instance. Pada Contoh ini menggunakan Ubuntu 20.04
+3. Pastikan pada Security Group, menambahkan HTTP dan HTTPS untuk dapat mengakses dengan ip-publicnya pada browser.
+4. Download folder
+5. Pilih EC2 yang dibuat tadi kemudian copy Alamat IPv4 Public. Lalu paste pada inventory.txt dan ganti ip-public ec2 dengan IPv4 Public.
+6. Pada ansible.cfg, ubah key_pair dengan key_pair dengan extensi .pem yang sudah anda buat dengan EC2.
+
+**Disini Saya menggunakan linux dan Visual Studio Code**
+7. Upload dengan Visual Studio Code
+7.1 Buka folder yang sudah didownload pada visual studio Code.
+7.2 Pilih Menu Terminal, lalu pilih New Terminal. Maka akan muncul terminal pada dibawah dengan direktori folder tempat penyimpanan folder.
+7.3 Upload playbook.yaml terlebih dahulu dengan command -> ansible-playbook playbook.yaml
+7.4 kemudian tunggu sampai selesai
+7.5 masuk ubuntu, lalu ketik command mysql -u root -p
+7.6 masukan password 12345 jika sesuai dengan yang diupload, jika berhasil maka akan muncul mysql>
+7.7 lalu upload wp-config.yaml dengan command -> ansible-playbook playbook.yaml
+7.8 Kemudian tunggu sampai selesai.
+7.9 lalu akses IPv4 public pada browser, maka akan muncul installasi wordpressnya.
+
+8. Upload dengan terminal di linux, langkahnya hampis sama dengan menggunakan Visual studio code
+8.1 buka terminal di linux, lalu masuk ke direktori folder tempat folder itu disimpan dengan cd /
+8.2 pada langkah ini dan selanjutnya lihat pada 7.3 sampai 7.7
